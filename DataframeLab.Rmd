@@ -1,6 +1,6 @@
 ---
 title: "Dataframes - In Class lab"
-author: "Dr. Shoemaker"
+author: "Justin Perez"
 date: "DATA 2401"
 output: html_document
 ---
@@ -31,6 +31,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 
 ```{r}
 
+glimpse(grants)
 
 ```
 
@@ -39,6 +40,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 
 ```{r}
 
+org <- grants$organization
 
 ```
 
@@ -47,6 +49,7 @@ Because you're in an RProject, you don't need to set your working directory in R
 
 ```{r}
 
+is.vector(org)
 
 ```
 
@@ -57,12 +60,18 @@ Now you can ask some interesting questions about the dataset:
 
 ```{r}
 
+mean_grant <- mean(grants$total_amount)
+print(mean_grant)
+
 ```
 
 
 - What was the dollar amount of the largest grant?
 
 ```{r}
+
+top_grant <- max(grants$total_amount)
+print(top_grant)
 
 ```
 
@@ -71,6 +80,9 @@ Now you can ask some interesting questions about the dataset:
 
 ```{r}
 
+bottom_grant <- min(grants$total_amount)
+print(bottom_grant)
+
 ```
 
 
@@ -78,6 +90,8 @@ Now you can ask some interesting questions about the dataset:
 
 ```{r}
 
+top_grantee <- grants$organization[grants$total_amount >= max(grants$total_amount)]
+print(top_grantee)
 
 ```
 
@@ -85,6 +99,9 @@ Now you can ask some interesting questions about the dataset:
 - Which organization received the smallest grant?
 
 ```{r}
+
+bottom_grantee <- grants$organization[grants$total_amount <= min(grants$total_amount)]
+print(bottom_grantee)
 
 ```
 
