@@ -109,11 +109,17 @@ print(bottom_grantee)
 
 ```{r}
 
+grants_2010_count <- length(grants$start_year == 2010)
+print(grants_2010_count)
+
 ```
 
 - How much was awarded in 2010? 
 
 ```{r}
+
+grants_2010_total <- sum(grants$total_amount[grants$start_year == 2010])
+print(grants_2010_total)
 
 ```
 
@@ -141,11 +147,15 @@ Do this, storing the result in a new variable
 
 ```{r}
 
+person_expenditure <- data.frame(USPersonalExpenditure)
+
 ```
 
 
 What are the current column names of your dataframe?
 ```{r}
+
+glimpse(person_expenditure)
 
 ```
 

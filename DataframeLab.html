@@ -448,9 +448,17 @@ print(top_grantee)</code></pre>
 print(bottom_grantee)</code></pre>
 <pre><code>## [1] &quot;New Mexico Business Roundtable for Educational Excellence&quot;</code></pre>
 <ul>
-<li><p>How many grants were awarded in 2010?</p></li>
-<li><p>How much was awarded in 2010?</p></li>
+<li>How many grants were awarded in 2010?</li>
 </ul>
+<pre class="r"><code>grants_2010_count &lt;- length(grants$start_year == 2010)
+print(grants_2010_count)</code></pre>
+<pre><code>## [1] 255</code></pre>
+<ul>
+<li>How much was awarded in 2010?</li>
+</ul>
+<pre class="r"><code>grants_2010_total &lt;- sum(grants$total_amount[grants$start_year == 2010])
+print(grants_2010_total)</code></pre>
+<pre><code>## [1] 29196031</code></pre>
 </div>
 <div id="working-with-built-in-data-sets" class="section level1">
 <h1>Working with built-in data sets</h1>
@@ -469,7 +477,16 @@ can find that out using)</p>
 argument to the <code>data.frame()</code> function to convert it a data
 frame.</p>
 <p>Do this, storing the result in a new variable</p>
+<pre class="r"><code>person_expenditure &lt;- data.frame(USPersonalExpenditure)</code></pre>
 <p>What are the current column names of your dataframe?</p>
+<pre class="r"><code>glimpse(person_expenditure)</code></pre>
+<pre><code>## Rows: 5
+## Columns: 5
+## $ X1940 &lt;dbl&gt; 22.200, 10.500, 3.530, 1.040, 0.341
+## $ X1945 &lt;dbl&gt; 44.500, 15.500, 5.760, 1.980, 0.974
+## $ X1950 &lt;dbl&gt; 59.60, 29.00, 9.71, 2.45, 1.80
+## $ X1955 &lt;dbl&gt; 73.2, 36.5, 14.0, 3.4, 2.6
+## $ X1960 &lt;dbl&gt; 86.80, 46.20, 21.10, 5.40, 3.64</code></pre>
 <p>Consider: why are they so strange? (Think about whether you could use
 a number like 1940 with dollar notation!)</p>
 <p>What are the current row names of your dataframe?</p>
