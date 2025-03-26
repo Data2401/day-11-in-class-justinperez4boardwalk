@@ -450,9 +450,9 @@ print(bottom_grantee)</code></pre>
 <ul>
 <li>How many grants were awarded in 2010?</li>
 </ul>
-<pre class="r"><code>grants_2010_count &lt;- length(grants$start_year == 2010)
+<pre class="r"><code>grants_2010_count &lt;- length(grants$start_year[grants$start_year == 2010])
 print(grants_2010_count)</code></pre>
-<pre><code>## [1] 255</code></pre>
+<pre><code>## [1] 18</code></pre>
 <ul>
 <li>How much was awarded in 2010?</li>
 </ul>
@@ -490,6 +490,9 @@ frame.</p>
 <p>Consider: why are they so strange? (Think about whether you could use
 a number like 1940 with dollar notation!)</p>
 <p>What are the current row names of your dataframe?</p>
+<pre class="r"><code>rownames(person_expenditure)</code></pre>
+<pre><code>## [1] &quot;Food and Tobacco&quot;    &quot;Household Operation&quot; &quot;Medical and Health&quot; 
+## [4] &quot;Personal Care&quot;       &quot;Private Education&quot;</code></pre>
 <p>Add a column “Category” to your data frame that contains the
 rownames</p>
 <p>Consider how this data isn’t tidy. Use the

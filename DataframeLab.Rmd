@@ -109,7 +109,7 @@ print(bottom_grantee)
 
 ```{r}
 
-grants_2010_count <- length(grants$start_year == 2010)
+grants_2010_count <- length(grants$start_year[grants$start_year == 2010])
 print(grants_2010_count)
 
 ```
@@ -165,6 +165,8 @@ Consider: why are they so strange? (Think about whether you could use a number l
 What are the current row names of your dataframe?
 ```{r}
 
+rownames(person_expenditure)
+
 ```
 
 
@@ -172,11 +174,16 @@ Add a column "Category" to your data frame that contains the rownames
 
 ```{r}
 
+person_expenditure <- rownames_to_column(person_expenditure, var = "Category")
+print(glimpse(person_expenditure))
 ```
 
 Consider how this data isn't tidy. Use the `pivot_longer()` function from last class to make the data tidy. 
 
 ```{r}
+
+person_expenditure <- pivot_longer(data=person_expenditure, cols=Category, names_to="category", values_to="expenditure")
+print(glimpse(person_expenditure))
 
 ```
 
