@@ -438,19 +438,19 @@ print(bottom_grant)</code></pre>
 <ul>
 <li>Which organization received the largest grant?</li>
 </ul>
-<pre class="r"><code>top_grantee &lt;- grants$organization[grants$total_amount &gt;= max(grants$total_amount)]
+<pre class="r"><code>top_grantee &lt;- grants$organization[grants$total_amount == max(grants$total_amount)]
 print(top_grantee)</code></pre>
 <pre><code>## [1] &quot;Hillsborough County Public Schools&quot;</code></pre>
 <ul>
 <li>Which organization received the smallest grant?</li>
 </ul>
-<pre class="r"><code>bottom_grantee &lt;- grants$organization[grants$total_amount &lt;= min(grants$total_amount)]
+<pre class="r"><code>bottom_grantee &lt;- grants$organization[grants$total_amount == min(grants$total_amount)]
 print(bottom_grantee)</code></pre>
 <pre><code>## [1] &quot;New Mexico Business Roundtable for Educational Excellence&quot;</code></pre>
 <ul>
 <li>How many grants were awarded in 2010?</li>
 </ul>
-<pre class="r"><code>grants_2010_count &lt;- length(grants$start_year[grants$start_year == 2010])
+<pre class="r"><code>grants_2010_count &lt;- length(grants$organization[grants$start_year == 2010])
 print(grants_2010_count)</code></pre>
 <pre><code>## [1] 18</code></pre>
 <ul>
@@ -466,7 +466,14 @@ print(grants_2010_total)</code></pre>
 <code>data()</code> function</p>
 <p>This will produce a data frame called
 <code>USPersonalExpenditure</code></p>
-<pre class="r"><code>data(&quot;USPersonalExpenditure&quot;)</code></pre>
+<pre class="r"><code>data(&quot;USPersonalExpenditure&quot;)
+head.matrix(USPersonalExpenditure)</code></pre>
+<pre><code>##                       1940   1945  1950 1955  1960
+## Food and Tobacco    22.200 44.500 59.60 73.2 86.80
+## Household Operation 10.500 15.500 29.00 36.5 46.20
+## Medical and Health   3.530  5.760  9.71 14.0 21.10
+## Personal Care        1.040  1.980  2.45  3.4  5.40
+## Private Education    0.341  0.974  1.80  2.6  3.64</code></pre>
 <p>The variable <code>USPersonalExpenditure</code> is now accessible to
 you. Unfortunately, it’s not a data frame (it’s actually a matrix, you
 can find that out using)</p>
@@ -487,6 +494,13 @@ frame.</p>
 ## $ X1950 &lt;dbl&gt; 59.60, 29.00, 9.71, 2.45, 1.80
 ## $ X1955 &lt;dbl&gt; 73.2, 36.5, 14.0, 3.4, 2.6
 ## $ X1960 &lt;dbl&gt; 86.80, 46.20, 21.10, 5.40, 3.64</code></pre>
+<pre class="r"><code>head(person_expenditure)</code></pre>
+<pre><code>##                      X1940  X1945 X1950 X1955 X1960
+## Food and Tobacco    22.200 44.500 59.60  73.2 86.80
+## Household Operation 10.500 15.500 29.00  36.5 46.20
+## Medical and Health   3.530  5.760  9.71  14.0 21.10
+## Personal Care        1.040  1.980  2.45   3.4  5.40
+## Private Education    0.341  0.974  1.80   2.6  3.64</code></pre>
 <p>Consider: why are they so strange? (Think about whether you could use
 a number like 1940 with dollar notation!)</p>
 <p>What are the current row names of your dataframe?</p>
@@ -495,15 +509,84 @@ a number like 1940 with dollar notation!)</p>
 ## [4] &quot;Personal Care&quot;       &quot;Private Education&quot;</code></pre>
 <p>Add a column “Category” to your data frame that contains the
 rownames</p>
+<pre class="r"><code>person_expenditure &lt;- rownames_to_column(person_expenditure, var = &quot;Category&quot;)
+print(glimpse(person_expenditure))</code></pre>
+<pre><code>## Rows: 5
+## Columns: 6
+## $ Category &lt;chr&gt; &quot;Food and Tobacco&quot;, &quot;Household Operation&quot;, &quot;Medical and Healt…
+## $ X1940    &lt;dbl&gt; 22.200, 10.500, 3.530, 1.040, 0.341
+## $ X1945    &lt;dbl&gt; 44.500, 15.500, 5.760, 1.980, 0.974
+## $ X1950    &lt;dbl&gt; 59.60, 29.00, 9.71, 2.45, 1.80
+## $ X1955    &lt;dbl&gt; 73.2, 36.5, 14.0, 3.4, 2.6
+## $ X1960    &lt;dbl&gt; 86.80, 46.20, 21.10, 5.40, 3.64
+##              Category  X1940  X1945 X1950 X1955 X1960
+## 1    Food and Tobacco 22.200 44.500 59.60  73.2 86.80
+## 2 Household Operation 10.500 15.500 29.00  36.5 46.20
+## 3  Medical and Health  3.530  5.760  9.71  14.0 21.10
+## 4       Personal Care  1.040  1.980  2.45   3.4  5.40
+## 5   Private Education  0.341  0.974  1.80   2.6  3.64</code></pre>
 <p>Consider how this data isn’t tidy. Use the
 <code>pivot_longer()</code> function from last class to make the data
 tidy.</p>
+<pre class="r"><code>person_expenditure &lt;- pivot_longer(data=person_expenditure, cols=-Category, names_to=&quot;Year&quot;, values_to=&quot;Expenditure&quot;)
+print(glimpse(person_expenditure))</code></pre>
+<pre><code>## Rows: 25
+## Columns: 3
+## $ Category    &lt;chr&gt; &quot;Food and Tobacco&quot;, &quot;Food and Tobacco&quot;, &quot;Food and Tobacco&quot;…
+## $ Year        &lt;chr&gt; &quot;X1940&quot;, &quot;X1945&quot;, &quot;X1950&quot;, &quot;X1955&quot;, &quot;X1960&quot;, &quot;X1940&quot;, &quot;X19…
+## $ Expenditure &lt;dbl&gt; 22.200, 44.500, 59.600, 73.200, 86.800, 10.500, 15.500, 29…
+## # A tibble: 25 × 3
+##    Category            Year  Expenditure
+##    &lt;chr&gt;               &lt;chr&gt;       &lt;dbl&gt;
+##  1 Food and Tobacco    X1940        22.2
+##  2 Food and Tobacco    X1945        44.5
+##  3 Food and Tobacco    X1950        59.6
+##  4 Food and Tobacco    X1955        73.2
+##  5 Food and Tobacco    X1960        86.8
+##  6 Household Operation X1940        10.5
+##  7 Household Operation X1945        15.5
+##  8 Household Operation X1950        29  
+##  9 Household Operation X1955        36.5
+## 10 Household Operation X1960        46.2
+## # ℹ 15 more rows</code></pre>
 <p>How much money was spent on personal care in 1940?</p>
+<pre class="r"><code>personal_care &lt;- person_expenditure$Category==&quot;Personal Care&quot;
+nineforty = person_expenditure$Year==&quot;X1940&quot;
+person_expenditure$Expenditure[nineforty &amp; personal_care]</code></pre>
+<pre><code>## [1] 1.04</code></pre>
 <p>How much money was spent on Food and Tobacco in 1960?</p>
+<pre class="r"><code>food_tob &lt;- person_expenditure$Category==&quot;Food and Tobacco&quot;
+ninesixty &lt;- person_expenditure$Year==&quot;X1960&quot;
+person_expenditure$Expenditure[ninesixty &amp; food_tob]</code></pre>
+<pre><code>## [1] 86.8</code></pre>
 <p>What was the highest expenditure category in 1960?</p>
+<pre class="r"><code>ninesixty &lt;- person_expenditure$Year==&quot;X1960&quot;
+max_ninesixty &lt;- max(person_expenditure$Expenditure[ninesixty])
+person_expenditure$Category[ninesixty][person_expenditure$Expenditure[ninesixty] == max_ninesixty]</code></pre>
+<pre><code>## [1] &quot;Food and Tobacco&quot;</code></pre>
 <p>Define a function <code>lowest_category</code> that takes in a year
 as a parameter, and returns the lowest spending category of that
 year</p>
+<pre class="r"><code>lowest_category &lt;- function(year){
+  
+  year_expenditure_bool &lt;- person_expenditure$Year==as.character(year)
+  year_expenditure_df &lt;- person_expenditure[year_expenditure_bool, ]
+  #print(is.data.frame(year_expenditure_df))#True
+  min_expenditure_bool &lt;- year_expenditure_df$Expenditure == min(year_expenditure_df$Expenditure)
+  min_expenditure_df &lt;- year_expenditure_df[min_expenditure_bool, ]
+  min_expenditure_df$Category
+
+}
+
+
+lowest_category_fatima &lt;- function(year) {
+  expenditure_year &lt;- person_expenditure[person_expenditure$Year == as.character(year), ]
+  lowest_category_year &lt;- expenditure_year$Category[which.min(expenditure_year$Expenditure)]
+  return(lowest_category_year)
+}
+
+lowest_category(&quot;X1960&quot;)</code></pre>
+<pre><code>## [1] &quot;Private Education&quot;</code></pre>
 <p>Using your function, determine the lowest spending category of each
 year Hint: use the <code>sapply()</code> function to apply your function
 to a vector of years</p>

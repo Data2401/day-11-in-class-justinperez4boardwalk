@@ -90,7 +90,7 @@ print(bottom_grant)
 
 ```{r}
 
-top_grantee <- grants$organization[grants$total_amount >= max(grants$total_amount)]
+top_grantee <- grants$organization[grants$total_amount == max(grants$total_amount)]
 print(top_grantee)
 
 ```
@@ -100,7 +100,7 @@ print(top_grantee)
 
 ```{r}
 
-bottom_grantee <- grants$organization[grants$total_amount <= min(grants$total_amount)]
+bottom_grantee <- grants$organization[grants$total_amount == min(grants$total_amount)]
 print(bottom_grantee)
 
 ```
@@ -109,7 +109,7 @@ print(bottom_grantee)
 
 ```{r}
 
-grants_2010_count <- length(grants$start_year[grants$start_year == 2010])
+grants_2010_count <- length(grants$organization[grants$start_year == 2010])
 print(grants_2010_count)
 
 ```
@@ -131,6 +131,7 @@ Load R's "USPersonalExpenditure" dataset using the `data()` function
 This will produce a data frame called `USPersonalExpenditure`
 ```{r}
 data("USPersonalExpenditure")
+head.matrix(USPersonalExpenditure)
 ```
 
 The variable `USPersonalExpenditure` is now accessible to you. Unfortunately, it's not a data frame (it's actually a matrix, you can find that out using) 
@@ -156,6 +157,7 @@ What are the current column names of your dataframe?
 ```{r}
 
 glimpse(person_expenditure)
+head(person_expenditure)
 
 ```
 
@@ -182,7 +184,7 @@ Consider how this data isn't tidy. Use the `pivot_longer()` function from last c
 
 ```{r}
 
-person_expenditure <- pivot_longer(data=person_expenditure, cols=Category, names_to="category", values_to="expenditure")
+person_expenditure <- pivot_longer(data=person_expenditure, cols=-Category, names_to="Year", values_to="Expenditure")
 print(glimpse(person_expenditure))
 
 ```
@@ -191,12 +193,20 @@ print(glimpse(person_expenditure))
 How much money was spent on personal care in 1940?
 ```{r}
 
+
+personal_care <- person_expenditure$Category=="Personal Care"
+nineforty = person_expenditure$Year=="X1940"
+person_expenditure$Expenditure[nineforty & personal_care]
+
 ```
 
 
 How much money was spent on Food and Tobacco in 1960?
 ```{r}
 
+food_tob <- person_expenditure$Category=="Food and Tobacco"
+ninesixty <- person_expenditure$Year=="X1960"
+person_expenditure$Expenditure[ninesixty & food_tob]
 
 ```
 
@@ -204,6 +214,9 @@ How much money was spent on Food and Tobacco in 1960?
 What was the highest expenditure category in 1960?
 ```{r}
 
+ninesixty <- person_expenditure$Year=="X1960"
+max_ninesixty <- max(person_expenditure$Expenditure[ninesixty])
+person_expenditure$Category[ninesixty][person_expenditure$Expenditure[ninesixty] == max_ninesixty]
 
 ```
 
@@ -211,7 +224,25 @@ What was the highest expenditure category in 1960?
 Define a function `lowest_category` that takes in a year as a parameter, and returns the lowest spending category of that year
 ```{r}
 
+lowest_category <- function(year){
+  
+  year_expenditure_bool <- person_expenditure$Year==as.character(year)
+  year_expenditure_df <- person_expenditure[year_expenditure_bool, ]
+  #print(is.data.frame(year_expenditure_df))#True
+  min_expenditure_bool <- year_expenditure_df$Expenditure == min(year_expenditure_df$Expenditure)
+  min_expenditure_df <- year_expenditure_df[min_expenditure_bool, ]
+  min_expenditure_df$Category
 
+}
+
+
+lowest_category1 <- function(year) {
+  expenditure_year <- person_expenditure[person_expenditure$Year == as.character(year), ]
+  lowest_category_year <- expenditure_year$Category[which.min(expenditure_year$Expenditure)]
+  return(lowest_category_year)
+}
+
+lowest_category("X1960")
 
 ```
 
